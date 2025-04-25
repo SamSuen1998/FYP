@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Base64 Manual Encoding Guide</title>
+    <title>Interactive Base64 Encoding Tutorial</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,7 +11,11 @@
             padding: 20px;
             color: #333;
         }
-        h2 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 5px; }
+        h2 { 
+            color: #2c3e50; 
+            border-bottom: 2px solid #3498db; 
+            padding-bottom: 5px; 
+        }
         .step {
             background-color: #f9f9f9;
             border-left: 4px solid #3498db;
@@ -40,99 +44,252 @@
             background-color: #3498db;
             color: white;
         }
-        tr:nth-child(even) { background-color: #f2f2f2; }
-        .note { background: #fffde7; padding: 10px; border-left: 4px solid #ffd600; }
+        tr:nth-child(even) { 
+            background-color: #f2f2f2; 
+        }
+        .note { 
+            background: #fffde7; 
+            padding: 10px; 
+            border-left: 4px solid #ffd600; 
+        }
+        .exercise {
+            background: #e8f5e9;
+            padding: 15px;
+            border-left: 4px solid #4caf50;
+            margin: 20px 0;
+        }
+        .user-input {
+            margin: 10px 0;
+            padding: 8px;
+            width: 200px;
+        }
+        .check-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 8px;
+            font-weight: bold;
+        }
+        .correct {
+            color: #2e7d32;
+        }
+        .incorrect {
+            color: #c62828;
+        }
+        .hint {
+            color: #0277bd;
+            font-style: italic;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            background: #eee;
+            cursor: pointer;
+            margin-right: 5px;
+            border-radius: 5px 5px 0 0;
+        }
+        .tab.active {
+            background: #3498db;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
-    <h1>Base64 Manual Encoding: Step-by-Step</h1>
+    <h1>Interactive Base64 Encoding Tutorial</h1>
     
-    <h2>Example: Encoding "Hi" to Base64</h2>
-    
-    <div class="step">
-        <h3>Step 1: Convert Letters to ASCII Codes</h3>
-        <table>
-            <tr><th>Character</th><th>ASCII Code</th></tr>
-            <tr><td>H</td><td>72</td></tr>
-            <tr><td>i</td><td>105</td></tr>
-        </table>
+    <div class="tabs">
+        <div class="tab active" onclick="openTab(event, 'tutorial')">Tutorial</div>
+        <div class="tab" onclick="openTab(event, 'practice')">Practice</div>
     </div>
-    
-    <div class="step">
-        <h3>Step 2: Convert ASCII to 8-bit Binary</h3>
-        <table>
-            <tr><th>Character</th><th>Binary (8 bits)</th></tr>
-            <tr><td>H (72)</td><td><span class="binary">01001000</span></td></tr>
-            <tr><td>i (105)</td><td><span class="binary">01101001</span></td></tr>
-        </table>
-    </div>
-    
-    <div class="step">
-        <h3>Step 3: Combine the Binary</h3>
-        <p>
-            H = <span class="binary">01001000</span><br>
-            i = <span class="binary">01101001</span><br>
-            Combined: <span class="binary">01001000 01101001</span> (remove spaces)
-        </p>
-        <p class="binary">0100100001101001</p>
-    </div>
-    
-    <div class="step">
-        <h3>Step 4: Split into 6-bit Groups</h3>
-        <p>Base64 uses 6 bits per character:</p>
-        <p class="binary">010010 | 000110 | 1001</p>
-        <div class="note">
-            <strong>Note:</strong> The last group only has 4 bits. We add two <span class="binary">0</span>s 
-            to make it 6 bits: <span class="binary">1001</span> → <span class="binary">100100</span>
+
+    <div id="tutorial" class="tab-content active">
+        <h2>Example: Encoding "Hi" to Base64</h2>
+        
+        <div class="step">
+            <h3>Step 1: Convert Letters to ASCII Codes</h3>
+            <table>
+                <tr><th>Character</th><th>ASCII Code</th></tr>
+                <tr><td>H</td><td>72</td></tr>
+                <tr><td>i</td><td>105</td></tr>
+            </table>
         </div>
-        <p>Final groups:</p>
-        <p class="binary">010010 | 000110 | 100100</p>
-    </div>
-    
-    <div class="step">
-        <h3>Step 5: Convert 6-bit Groups to Decimal</h3>
-        <table>
-            <tr><th>6-bit Group</th><th>Binary</th><th>Decimal</th></tr>
-            <tr><td>1st</td><td><span class="binary">010010</span></td><td>18</td></tr>
-            <tr><td>2nd</td><td><span class="binary">000110</span></td><td>6</td></tr>
-            <tr><td>3rd</td><td><span class="binary">100100</span></td><td>36</td></tr>
-        </table>
-    </div>
-    
-    <div class="step">
-        <h3>Step 6: Map Numbers to Base64 Characters</h3>
-        <p>Using the Base64 character table:</p>
-        <table>
-            <tr><th>Decimal</th><th>Base64 Character</th></tr>
-            <tr><td>18</td><td>S</td></tr>
-            <tr><td>6</td><td>G</td></tr>
-            <tr><td>36</td><td>k</td></tr>
-        </table>
-        <p>Current result: <strong>SGk</strong></p>
-    </div>
-    
-    <div class="step">
-        <h3>Step 7: Add Padding ('=') if Needed</h3>
-        <p>Original text ("Hi") is <strong>2 bytes</strong>, but Base64 works in <strong>3-byte chunks</strong>.</p>
-        <p>Since we're missing 1 byte, we add <strong>one '='</strong> at the end.</p>
-        <div class="note">
-            <strong>Padding rule:</strong> Add 1 '=' if 2 bytes input, 2 '=' if 1 byte input.
+        
+        <div class="step">
+            <h3>Step 2: Convert ASCII to 8-bit Binary</h3>
+            <table>
+                <tr><th>Character</th><th>Binary (8 bits)</th></tr>
+                <tr><td>H (72)</td><td><span class="binary">01001000</span></td></tr>
+                <tr><td>i (105)</td><td><span class="binary">01101001</span></td></tr>
+            </table>
         </div>
-        <p><strong>Final Base64:</strong> <span class="binary">SGk=</span></p>
+        
+        <div class="step">
+            <h3>Step 3: Combine the Binary</h3>
+            <p>
+                H = <span class="binary">01001000</span><br>
+                i = <span class="binary">01101001</span><br>
+                Combined: <span class="binary">01001000 01101001</span> (remove spaces)
+            </p>
+            <p class="binary">0100100001101001</p>
+        </div>
+        
+        <div class="step">
+            <h3>Step 4: Split into 6-bit Groups</h3>
+            <p>Base64 uses 6 bits per character:</p>
+            <p class="binary">010010 | 000110 | 1001</p>
+            <div class="note">
+                <strong>Note:</strong> The last group only has 4 bits. We add two <span class="binary">0</span>s 
+                to make it 6 bits: <span class="binary">1001</span> → <span class="binary">100100</span>
+            </div>
+            <p>Final groups:</p>
+            <p class="binary">010010 | 000110 | 100100</p>
+        </div>
+        
+        <div class="step">
+            <h3>Step 5: Convert 6-bit Groups to Decimal</h3>
+            <table>
+                <tr><th>6-bit Group</th><th>Binary</th><th>Decimal</th></tr>
+                <tr><td>1st</td><td><span class="binary">010010</span></td><td>18</td></tr>
+                <tr><td>2nd</td><td><span class="binary">000110</span></td><td>6</td></tr>
+                <tr><td>3rd</td><td><span class="binary">100100</span></td><td>36</td></tr>
+            </table>
+        </div>
+        
+        <div class="step">
+            <h3>Step 6: Map Numbers to Base64 Characters</h3>
+            <p>Using the Base64 character table:</p>
+            <table>
+                <tr><th>Decimal</th><th>Base64 Character</th></tr>
+                <tr><td>18</td><td>S</td></tr>
+                <tr><td>6</td><td>G</td></tr>
+                <tr><td>36</td><td>k</td></tr>
+            </table>
+            <p>Current result: <strong>SGk</strong></p>
+        </div>
+        
+        <div class="step">
+            <h3>Step 7: Add Padding ('=') if Needed</h3>
+            <p>Original text ("Hi") is <strong>2 bytes</strong>, but Base64 works in <strong>3-byte chunks</strong>.</p>
+            <p>Since we're missing 1 byte, we add <strong>one '='</strong> at the end.</p>
+            <div class="note">
+                <strong>Padding rule:</strong> Add 1 '=' if 2 bytes input, 2 '=' if 1 byte input.
+            </div>
+            <p><strong>Final Base64:</strong> <span class="binary">SGk=</span></p>
+        </div>
+        
+        <h2>Summary</h2>
+        <ol>
+            <li>Convert text → ASCII codes → 8-bit binary</li>
+            <li>Combine binary → split into 6-bit chunks</li>
+            <li>Convert 6-bit chunks → decimal → Base64 characters</li>
+            <li>Add padding '=' if needed</li>
+        </ol>
+        
+        <div class="note">
+            <strong>Tip:</strong> In practice, use tools like Python's <code>base64.b64encode()</code> 
+            or online converters - manual encoding is just for learning!
+        </div>
     </div>
-    
-    <h2>Summary</h2>
-    <ol>
-        <li>Convert text → ASCII codes → 8-bit binary</li>
-        <li>Combine binary → split into 6-bit chunks</li>
-        <li>Convert 6-bit chunks → decimal → Base64 characters</li>
-        <li>Add padding '=' if needed</li>
-    </ol>
-    
-    <div class="note">
-        <strong>Tip:</strong> In practice, use tools like Python's <code>base64.b64encode()</code> 
-        or online converters - manual encoding is just for learning!
+
+    <div id="practice" class="tab-content">
+        <div class="exercise">
+            <h2>Interactive Practice</h2>
+            
+            <div class="problem">
+                <h3>Exercise 1: Encode "A" to Base64</h3>
+                <input type="text" class="user-input" id="answer1" placeholder="Enter your answer">
+                <button class="check-btn" onclick="checkAnswer(1, 'QQ==')">Check Answer</button>
+                <span class="hint" onclick="showHint(1)">Show Hint</span>
+                <div class="result" id="result1"></div>
+            </div>
+            
+            <div class="problem">
+                <h3>Exercise 2: Encode "123" to Base64</h3>
+                <input type="text" class="user-input" id="answer2" placeholder="Enter your answer">
+                <button class="check-btn" onclick="checkAnswer(2, 'MTIz')">Check Answer</button>
+                <span class="hint" onclick="showHint(2)">Show Hint</span>
+                <div class="result" id="result2"></div>
+            </div>
+            
+            <div class="problem">
+                <h3>Exercise 3: Decode "VGhpcyBpcyBDVEY="</h3>
+                <input type="text" class="user-input" id="answer3" placeholder="Enter your answer">
+                <button class="check-btn" onclick="checkAnswer(3, 'This is CTF')">Check Answer</button>
+                <span class="hint" onclick="showHint(3)">Show Hint</span>
+                <div class="result" id="result3"></div>
+            </div>
+            
+            <div class="problem">
+                <h3>Advanced Challenge: Encode "你好" to Base64</h3>
+                <input type="text" class="user-input" id="answer4" placeholder="Enter your answer">
+                <button class="check-btn" onclick="checkAnswer(4, '5L2g5aW9')">Check Answer</button>
+                <span class="hint" onclick="showHint(4)">Show Hint</span>
+                <div class="result" id="result4"></div>
+            </div>
+        </div>
     </div>
-    
+
+    <script>
+        function checkAnswer(problemNum, correctAnswer) {
+            const userAnswer = document.getElementById(`answer${problemNum}`).value.trim();
+            const resultElement = document.getElementById(`result${problemNum}`);
+            
+            if (userAnswer === correctAnswer) {
+                resultElement.textContent = "✓ Correct!";
+                resultElement.className = "result correct";
+            } else {
+                resultElement.textContent = "✗ Incorrect, please try again";
+                resultElement.className = "result incorrect";
+            }
+        }
+        
+        function showHint(problemNum) {
+            const hints = [
+                "ASCII code 'A' = 65 → binary 01000001",
+                "ASCII codes: '1'=49, '2'=50, '3'=51",
+                "Decode this Base64 back to original text",
+                "You need to convert Chinese characters to UTF-8 bytes first"
+            ];
+            
+            alert(hints[problemNum - 1]);
+        }
+
+        function openTab(evt, tabName) {
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+            
+            const tabs = document.getElementsByClassName("tab");
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
 </body>
 </html>
