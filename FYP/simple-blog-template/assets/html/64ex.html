@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>互動式 Base64 編碼教學</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h2 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 5px; }
+        .step {
+            background-color: #f9f9f9;
+            border-left: 4px solid #3498db;
+            padding: 10px 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .binary {
+            font-family: monospace;
+            background: #f0f0f0;
+            padding: 2px 5px;
+            border-radius: 3px;
+            letter-spacing: 1px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        .note { background: #fffde7; padding: 10px; border-left: 4px solid #ffd600; }
+        .exercise {
+            background: #e8f5e9;
+            padding: 15px;
+            border-left: 4px solid #4caf50;
+            margin: 20px 0;
+        }
+        .answer {
+            color: #2e7d32;
+            font-weight: bold;
+        }
+        .user-input {
+            margin: 10px 0;
+            padding: 8px;
+            width: 200px;
+        }
+        .check-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 8px;
+            font-weight: bold;
+        }
+        .correct {
+            color: #2e7d32;
+        }
+        .incorrect {
+            color: #c62828;
+        }
+        .hint {
+            color: #0277bd;
+            font-style: italic;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>互動式 Base64 編碼教學</h1>
+    
+    <!-- [原有步驟1-7的內容保持不變] -->
+    <!-- ... 原有代碼 ... -->
+
+    <div class="exercise">
+        <h2>5. 互動練習</h2>
+        
+        <div class="problem">
+            <h3>練習1: 將 "A" 編碼為 Base64</h3>
+            <input type="text" class="user-input" id="answer1" placeholder="輸入你的答案">
+            <button class="check-btn" onclick="checkAnswer(1, 'QQ==')">檢查答案</button>
+            <span class="hint" onclick="showHint(1)">顯示提示</span>
+            <div class="result" id="result1"></div>
+        </div>
+        
+        <div class="problem">
+            <h3>練習2: 將 "123" 編碼為 Base64</h3>
+            <input type="text" class="user-input" id="answer2" placeholder="輸入你的答案">
+            <button class="check-btn" onclick="checkAnswer(2, 'MTIz')">檢查答案</button>
+            <span class="hint" onclick="showHint(2)">顯示提示</span>
+            <div class="result" id="result2"></div>
+        </div>
+        
+        <div class="problem">
+            <h3>練習3: 解碼 "VGhpcyBpcyBDVEY="</h3>
+            <input type="text" class="user-input" id="answer3" placeholder="輸入你的答案">
+            <button class="check-btn" onclick="checkAnswer(3, 'This is CTF')">檢查答案</button>
+            <span class="hint" onclick="showHint(3)">顯示提示</span>
+            <div class="result" id="result3"></div>
+        </div>
+        
+        <div class="problem">
+            <h3>進階挑戰: 將 "你好" 編碼為 Base64</h3>
+            <input type="text" class="user-input" id="answer4" placeholder="輸入你的答案">
+            <button class="check-btn" onclick="checkAnswer(4, '5L2g5aW9')">檢查答案</button>
+            <span class="hint" onclick="showHint(4)">顯示提示</span>
+            <div class="result" id="result4"></div>
+        </div>
+    </div>
+
+    <h2>總結</h2>
+    <ol>
+        <li>文字 → ASCII 碼 → 8位二進制</li>
+        <li>合併二進制 → 分割成6位一組</li>
+        <li>6位二進制 → 十進制 → Base64 字符</li>
+        <li>必要時添加 '=' 填充</li>
+    </ol>
+    
+    <div class="note">
+        <strong>提示：</strong> 實際應用時，建議使用 Python 的 <code>base64.b64encode()</code> 
+        或在線工具，手動編碼僅用於學習！
+    </div>
+
+    <script>
+        function checkAnswer(problemNum, correctAnswer) {
+            const userAnswer = document.getElementById(`answer${problemNum}`).value.trim();
+            const resultElement = document.getElementById(`result${problemNum}`);
+            
+            if (userAnswer === correctAnswer) {
+                resultElement.textContent = "✓ 正確！";
+                resultElement.className = "result correct";
+            } else {
+                resultElement.textContent = "✗ 錯誤，請再試一次";
+                resultElement.className = "result incorrect";
+            }
+        }
+        
+        function showHint(problemNum) {
+            const hints = [
+                "ASCII 碼 'A' = 65 → 二進制 01000001",
+                "每個字符的 ASCII 碼：'1'=49, '2'=50, '3'=51",
+                "將 Base64 解碼回原始文字",
+                "需要先將中文字符轉換為 UTF-8 字節"
+            ];
+            
+            alert(hints[problemNum - 1]);
+        }
+    </script>
+</body>
+</html>
