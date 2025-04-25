@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Base64 Manual Encoding Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h2 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 5px; }
+        .step {
+            background-color: #f9f9f9;
+            border-left: 4px solid #3498db;
+            padding: 10px 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .binary {
+            font-family: monospace;
+            background: #f0f0f0;
+            padding: 2px 5px;
+            border-radius: 3px;
+            letter-spacing: 1px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        .note { background: #fffde7; padding: 10px; border-left: 4px solid #ffd600; }
+    </style>
+</head>
+<body>
+    <h1>Base64 Manual Encoding: Step-by-Step</h1>
+    
+    <h2>Example: Encoding "Hi" to Base64</h2>
+    
+    <div class="step">
+        <h3>Step 1: Convert Letters to ASCII Codes</h3>
+        <table>
+            <tr><th>Character</th><th>ASCII Code</th></tr>
+            <tr><td>H</td><td>72</td></tr>
+            <tr><td>i</td><td>105</td></tr>
+        </table>
+    </div>
+    
+    <div class="step">
+        <h3>Step 2: Convert ASCII to 8-bit Binary</h3>
+        <table>
+            <tr><th>Character</th><th>Binary (8 bits)</th></tr>
+            <tr><td>H (72)</td><td><span class="binary">01001000</span></td></tr>
+            <tr><td>i (105)</td><td><span class="binary">01101001</span></td></tr>
+        </table>
+    </div>
+    
+    <div class="step">
+        <h3>Step 3: Combine the Binary</h3>
+        <p>
+            H = <span class="binary">01001000</span><br>
+            i = <span class="binary">01101001</span><br>
+            Combined: <span class="binary">01001000 01101001</span> (remove spaces)
+        </p>
+        <p class="binary">0100100001101001</p>
+    </div>
+    
+    <div class="step">
+        <h3>Step 4: Split into 6-bit Groups</h3>
+        <p>Base64 uses 6 bits per character:</p>
+        <p class="binary">010010 | 000110 | 1001</p>
+        <div class="note">
+            <strong>Note:</strong> The last group only has 4 bits. We add two <span class="binary">0</span>s 
+            to make it 6 bits: <span class="binary">1001</span> → <span class="binary">100100</span>
+        </div>
+        <p>Final groups:</p>
+        <p class="binary">010010 | 000110 | 100100</p>
+    </div>
+    
+    <div class="step">
+        <h3>Step 5: Convert 6-bit Groups to Decimal</h3>
+        <table>
+            <tr><th>6-bit Group</th><th>Binary</th><th>Decimal</th></tr>
+            <tr><td>1st</td><td><span class="binary">010010</span></td><td>18</td></tr>
+            <tr><td>2nd</td><td><span class="binary">000110</span></td><td>6</td></tr>
+            <tr><td>3rd</td><td><span class="binary">100100</span></td><td>36</td></tr>
+        </table>
+    </div>
+    
+    <div class="step">
+        <h3>Step 6: Map Numbers to Base64 Characters</h3>
+        <p>Using the Base64 character table:</p>
+        <table>
+            <tr><th>Decimal</th><th>Base64 Character</th></tr>
+            <tr><td>18</td><td>S</td></tr>
+            <tr><td>6</td><td>G</td></tr>
+            <tr><td>36</td><td>k</td></tr>
+        </table>
+        <p>Current result: <strong>SGk</strong></p>
+    </div>
+    
+    <div class="step">
+        <h3>Step 7: Add Padding ('=') if Needed</h3>
+        <p>Original text ("Hi") is <strong>2 bytes</strong>, but Base64 works in <strong>3-byte chunks</strong>.</p>
+        <p>Since we're missing 1 byte, we add <strong>one '='</strong> at the end.</p>
+        <div class="note">
+            <strong>Padding rule:</strong> Add 1 '=' if 2 bytes input, 2 '=' if 1 byte input.
+        </div>
+        <p><strong>Final Base64:</strong> <span class="binary">SGk=</span></p>
+    </div>
+    
+    <h2>Summary</h2>
+    <ol>
+        <li>Convert text → ASCII codes → 8-bit binary</li>
+        <li>Combine binary → split into 6-bit chunks</li>
+        <li>Convert 6-bit chunks → decimal → Base64 characters</li>
+        <li>Add padding '=' if needed</li>
+    </ol>
+    
+    <div class="note">
+        <strong>Tip:</strong> In practice, use tools like Python's <code>base64.b64encode()</code> 
+        or online converters - manual encoding is just for learning!
+    </div>
+</body>
+</html>
